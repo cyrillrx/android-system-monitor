@@ -4,7 +4,7 @@ package com.cyrillrx.monitor.provider
  * @author Cyril Leroux
  *          Created on 05/07/2019.
  */
-class TestProvider(maxValue: Long) : StatProvider(maxValue) {
+class StatWatcherCountingAlerts(maxValue: Long) : StatWatcher(maxValue) {
 
     var alertTriggeredCount = 0
     var alertCanceledCount = 0

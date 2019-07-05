@@ -1,6 +1,6 @@
 package com.cyrillrx.monitor
 
-import com.cyrillrx.monitor.provider.TestProvider
+import com.cyrillrx.monitor.provider.StatWatcherCountingAlerts
 import org.junit.Assert
 import org.junit.Test
 
@@ -9,12 +9,12 @@ import org.junit.Test
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ProviderAlertTest {
+class WatcherAlertTest {
 
     @Test
     fun triggerAlert_changingValue() {
 
-        val provider = TestProvider(100L)
+        val provider = StatWatcherCountingAlerts(100L)
         provider.updateThreshold(0.5f)
 
         Assert.assertEquals(provider.alertTriggeredCount, 0)
@@ -30,7 +30,7 @@ class ProviderAlertTest {
     @Test
     fun triggerAlert_changingThreshold() {
 
-        val provider = TestProvider(100L)
+        val provider = StatWatcherCountingAlerts(100L)
         provider.updateValue(70L)
 
         Assert.assertEquals(provider.alertTriggeredCount, 0)
@@ -44,9 +44,27 @@ class ProviderAlertTest {
     }
 
     @Test
+    fun triggerAlert_changingValueTwice() {
+
+        val provider = StatWatcherCountingAlerts(100L)
+        provider.updateThreshold(0.5f)
+
+        Assert.assertEquals(provider.alertTriggeredCount, 0)
+        Assert.assertEquals(provider.alertCanceledCount, 0)
+
+        // Trigger alert
+        provider.updateValue(70L)
+        // This should not trigger another alert
+        provider.updateValue(90L)
+
+        Assert.assertEquals(provider.alertTriggeredCount, 1)
+        Assert.assertEquals(provider.alertCanceledCount, 0)
+    }
+
+    @Test
     fun cancelAlert_changingValue() {
 
-        val provider = TestProvider(100L)
+        val provider = StatWatcherCountingAlerts(100L)
         provider.updateThreshold(0.5f)
 
         Assert.assertEquals(provider.alertTriggeredCount, 0)
@@ -64,7 +82,7 @@ class ProviderAlertTest {
     @Test
     fun cancelAlert_changingThreshold() {
 
-        val provider = TestProvider(100L)
+        val provider = StatWatcherCountingAlerts(100L)
         provider.updateThreshold(0.5f)
 
         Assert.assertEquals(provider.alertTriggeredCount, 0)
@@ -82,7 +100,7 @@ class ProviderAlertTest {
     @Test
     fun cancelAlert_disablingThreshold() {
 
-        val provider = TestProvider(100L)
+        val provider = StatWatcherCountingAlerts(100L)
         provider.updateThreshold(0.5f)
 
         Assert.assertEquals(provider.alertTriggeredCount, 0)
