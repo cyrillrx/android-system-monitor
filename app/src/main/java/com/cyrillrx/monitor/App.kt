@@ -1,6 +1,7 @@
 package com.cyrillrx.monitor
 
 import android.app.Application
+import com.cyrillrx.monitor.notification.NotificationUtils
 
 /**
  * @author Cyril Leroux
@@ -10,5 +11,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        NotificationUtils.createChannels(this)
     }
 }
