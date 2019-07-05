@@ -1,7 +1,8 @@
-package com.cyrillrx.monitor
+package com.cyrillrx.monitor.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.cyrillrx.monitor.R
 
 class MainActivity : AppCompatActivity() {
 
