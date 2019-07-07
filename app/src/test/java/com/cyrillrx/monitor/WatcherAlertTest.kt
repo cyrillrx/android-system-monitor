@@ -14,14 +14,14 @@ class WatcherAlertTest {
     @Test
     fun triggerAlert_changingValue() {
 
-        val provider = StatWatcherCountingAlerts(100L)
-        provider.updateThreshold(0.5f)
+        val provider = StatWatcherCountingAlerts()
+        provider.updateThreshold(50)
 
         Assert.assertEquals(provider.alertTriggeredCount, 0)
         Assert.assertEquals(provider.alertCanceledCount, 0)
 
         // Trigger alert
-        provider.updateValue(70L)
+        provider.updateValue(70)
 
         Assert.assertEquals(provider.alertTriggeredCount, 1)
         Assert.assertEquals(provider.alertCanceledCount, 0)
@@ -30,14 +30,14 @@ class WatcherAlertTest {
     @Test
     fun triggerAlert_changingThreshold() {
 
-        val provider = StatWatcherCountingAlerts(100L)
-        provider.updateValue(70L)
+        val provider = StatWatcherCountingAlerts()
+        provider.updateValue(70)
 
         Assert.assertEquals(provider.alertTriggeredCount, 0)
         Assert.assertEquals(provider.alertCanceledCount, 0)
 
         // Trigger alert
-        provider.updateThreshold(0.5f)
+        provider.updateThreshold(50)
 
         Assert.assertEquals(provider.alertTriggeredCount, 1)
         Assert.assertEquals(provider.alertCanceledCount, 0)
@@ -46,16 +46,16 @@ class WatcherAlertTest {
     @Test
     fun triggerAlert_changingValueTwice() {
 
-        val provider = StatWatcherCountingAlerts(100L)
-        provider.updateThreshold(0.5f)
+        val provider = StatWatcherCountingAlerts()
+        provider.updateThreshold(50)
 
         Assert.assertEquals(provider.alertTriggeredCount, 0)
         Assert.assertEquals(provider.alertCanceledCount, 0)
 
         // Trigger alert
-        provider.updateValue(70L)
+        provider.updateValue(70)
         // This should not trigger another alert
-        provider.updateValue(90L)
+        provider.updateValue(90)
 
         Assert.assertEquals(provider.alertTriggeredCount, 1)
         Assert.assertEquals(provider.alertCanceledCount, 0)
@@ -64,16 +64,16 @@ class WatcherAlertTest {
     @Test
     fun cancelAlert_changingValue() {
 
-        val provider = StatWatcherCountingAlerts(100L)
-        provider.updateThreshold(0.5f)
+        val provider = StatWatcherCountingAlerts()
+        provider.updateThreshold(50)
 
         Assert.assertEquals(provider.alertTriggeredCount, 0)
         Assert.assertEquals(provider.alertCanceledCount, 0)
 
         // Trigger alert
-        provider.updateValue(70L)
+        provider.updateValue(70)
         // Cancel alert
-        provider.updateValue(40L)
+        provider.updateValue(40)
 
         Assert.assertEquals(provider.alertTriggeredCount, 1)
         Assert.assertEquals(provider.alertCanceledCount, 1)
@@ -82,16 +82,16 @@ class WatcherAlertTest {
     @Test
     fun cancelAlert_changingThreshold() {
 
-        val provider = StatWatcherCountingAlerts(100L)
-        provider.updateThreshold(0.5f)
+        val provider = StatWatcherCountingAlerts()
+        provider.updateThreshold(50)
 
         Assert.assertEquals(provider.alertTriggeredCount, 0)
         Assert.assertEquals(provider.alertCanceledCount, 0)
 
         // Trigger alert
-        provider.updateValue(70L)
+        provider.updateValue(70)
         // Cancel alert
-        provider.updateThreshold(0.9f)
+        provider.updateThreshold(90)
 
         Assert.assertEquals(provider.alertTriggeredCount, 1)
         Assert.assertEquals(provider.alertCanceledCount, 1)
@@ -100,14 +100,14 @@ class WatcherAlertTest {
     @Test
     fun cancelAlert_disablingThreshold() {
 
-        val provider = StatWatcherCountingAlerts(100L)
-        provider.updateThreshold(0.5f)
+        val provider = StatWatcherCountingAlerts()
+        provider.updateThreshold(50)
 
         Assert.assertEquals(provider.alertTriggeredCount, 0)
         Assert.assertEquals(provider.alertCanceledCount, 0)
 
         // Trigger alert
-        provider.updateValue(70L)
+        provider.updateValue(70)
         // Cancel alert
         provider.disableThreshold()
 

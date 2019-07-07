@@ -4,80 +4,72 @@ package com.cyrillrx.monitor.provider
  * @author Cyril Leroux
  *          Created on 05/07/2019.
  */
-open class StatWatcher(private val maxValue: Long) {
+open class StatWatcher {
 
-    private var lastKnownValue: Long = 0L
-    private var lastKnownPercent: Float = 0f
-
-    private var thresholdValue: Long? = null
-    private var thresholdPercent: Float? = null
+    private var lastKnownValue: Int = 0
+    private var thresholdPercent: Int? = null
 
     private var thresholdReached: Boolean = false
 
     var alertListener: AlertListener? = null
 
-    fun updateThreshold(newThresholdPercent: Float) {
+    /** @param newThreshold The threshold in percent [0-100] */
+    fun updateThreshold(newThreshold: Int) {
 
-        if (newThresholdPercent < 0f || newThresholdPercent > 1f) {
-            throw IllegalArgumentException("thresholdPercentage should be between 0 and 1 but was $newThresholdPercent")
+        if (newThreshold < MIN_VALUE || newThreshold > MAX_VALUE) {
+            throw IllegalArgumentException("thresholdPercentage should be between $MIN_VALUE and $MAX_VALUE but was $newThreshold")
         }
 
         // Save the old state to be able to detect threshold crossing
         val wasThresholdReached = thresholdReached
 
         // Update inner attributes
-        thresholdPercent = newThresholdPercent
-        thresholdValue = (maxValue.toFloat() * newThresholdPercent).toLong()
+        thresholdPercent = newThreshold
         thresholdReached = isThresholdReached(lastKnownValue)
 
         // Detect threshold crossing
         if (wasThresholdReached && !thresholdReached) {
-            onAlertCanceled(lastKnownPercent)
+            alertListener?.onAlertCanceled(lastKnownValue)
 
         } else if (!wasThresholdReached && thresholdReached) {
-            onAlertTriggered(lastKnownPercent)
+            alertListener?.onAlertTriggered(lastKnownValue)
         }
     }
 
     fun disableThreshold() {
-        thresholdValue = null
         thresholdPercent = null
 
         if (thresholdReached) {
-            onAlertCanceled(lastKnownPercent)
+            alertListener?.onAlertCanceled(lastKnownValue)
         }
     }
 
-    fun updateValue(newValue: Long) {
+    fun updateValue(newValue: Int) {
 
         // Save the old state to be able to detect threshold crossing
         val wasThresholdReached = thresholdReached
 
         // Update inner attributes
         lastKnownValue = newValue
-        lastKnownPercent = newValue.toFloat() / maxValue.toFloat()
         thresholdReached = isThresholdReached(newValue)
 
         // Detect threshold crossing
         if (wasThresholdReached && !thresholdReached) {
-            onAlertCanceled(lastKnownPercent)
+            alertListener?.onAlertCanceled(lastKnownValue)
 
         } else if (!wasThresholdReached && thresholdReached) {
-            onAlertTriggered(lastKnownPercent)
+            alertListener?.onAlertTriggered(lastKnownValue)
         }
     }
 
-    protected open fun onAlertTriggered(crossingPercent: Float) {
-        alertListener?.onAlertTriggered(crossingPercent)
-    }
-
-    protected open fun onAlertCanceled(crossingPercent: Float?) {
-        alertListener?.onAlertCanceled(crossingPercent)
-    }
-
-    private fun isThresholdReached(value: Long?): Boolean {
-        val thresholdValue = thresholdValue ?: return false
+    private fun isThresholdReached(value: Int?): Boolean {
+        val thresholdPercent = thresholdPercent ?: return false
         // >= because we consider that an equality triggers the threshold
-        return value != null && value >= thresholdValue
+        return value != null && value >= thresholdPercent
+    }
+
+    companion object {
+        private const val MIN_VALUE = 0
+        private const val MAX_VALUE = 100
     }
 }

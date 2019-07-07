@@ -6,7 +6,7 @@ package com.cyrillrx.monitor.provider
  */
 interface AlertListener {
 
-    fun onAlertTriggered(percentage: Float?)
+    fun onAlertTriggered(percentage: Int?)
 
-    fun onAlertCanceled(percentage: Float?)
+    fun onAlertCanceled(percentage: Int?)
 }
