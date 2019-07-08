@@ -4,14 +4,12 @@ package com.cyrillrx.monitor.provider
  * @author Cyril Leroux
  *          Created on 05/07/2019.
  */
-open class StatWatcher {
+open class StatWatcher(protected var alertListener: AlertListener? = null) : ValueUpdatedListener {
 
     private var lastKnownValue: Int = 0
     private var thresholdPercent: Int? = null
 
     private var thresholdReached: Boolean = false
-
-    var alertListener: AlertListener? = null
 
     /** @param newThreshold The threshold in percent [0-100] */
     fun updateThreshold(newThreshold: Int) {
@@ -44,7 +42,7 @@ open class StatWatcher {
         }
     }
 
-    fun updateValue(newValue: Int) {
+    override fun onValueUpdated(newValue: Int) {
 
         // Save the old state to be able to detect threshold crossing
         val wasThresholdReached = thresholdReached

@@ -3,12 +3,13 @@ package com.cyrillrx.monitor.provider.impl
 import android.app.ActivityManager
 import android.content.Context
 import com.cyrillrx.monitor.provider.StatProvider
+import com.cyrillrx.monitor.provider.ValueUpdatedListener
 
 /**
  * @author Cyril Leroux
  *          Created on 05/07/2019.
  */
-class GlobalRamUsageProvider(private val context: Context) : StatProvider() {
+class GlobalRamUsageProvider(private val context: Context, listener: ValueUpdatedListener) : StatProvider(listener) {
 
     override fun fetchData(): Int {
 
@@ -21,8 +22,10 @@ class GlobalRamUsageProvider(private val context: Context) : StatProvider() {
         val totalMemBytes: Long = memoryInfo.totalMem
         val usedMemBytes: Long = totalMemBytes - availableMemBytes
 
-
         val memoryUsagePercentage = usedMemBytes.toDouble() / totalMemBytes.toDouble() * 100.0
-        return memoryUsagePercentage.toInt()
+        val result = memoryUsagePercentage.toInt()
+
+        listener.onValueUpdated(result)
+        return result
     }
 }

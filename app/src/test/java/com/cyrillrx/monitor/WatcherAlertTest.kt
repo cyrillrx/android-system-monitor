@@ -21,7 +21,7 @@ class WatcherAlertTest {
         Assert.assertEquals(provider.alertCanceledCount, 0)
 
         // Trigger alert
-        provider.updateValue(70)
+        provider.onValueUpdated(70)
 
         Assert.assertEquals(provider.alertTriggeredCount, 1)
         Assert.assertEquals(provider.alertCanceledCount, 0)
@@ -31,7 +31,7 @@ class WatcherAlertTest {
     fun triggerAlert_changingThreshold() {
 
         val provider = StatWatcherCountingAlerts()
-        provider.updateValue(70)
+        provider.onValueUpdated(70)
 
         Assert.assertEquals(provider.alertTriggeredCount, 0)
         Assert.assertEquals(provider.alertCanceledCount, 0)
@@ -53,9 +53,9 @@ class WatcherAlertTest {
         Assert.assertEquals(provider.alertCanceledCount, 0)
 
         // Trigger alert
-        provider.updateValue(70)
+        provider.onValueUpdated(70)
         // This should not trigger another alert
-        provider.updateValue(90)
+        provider.onValueUpdated(90)
 
         Assert.assertEquals(provider.alertTriggeredCount, 1)
         Assert.assertEquals(provider.alertCanceledCount, 0)
@@ -71,9 +71,9 @@ class WatcherAlertTest {
         Assert.assertEquals(provider.alertCanceledCount, 0)
 
         // Trigger alert
-        provider.updateValue(70)
+        provider.onValueUpdated(70)
         // Cancel alert
-        provider.updateValue(40)
+        provider.onValueUpdated(40)
 
         Assert.assertEquals(provider.alertTriggeredCount, 1)
         Assert.assertEquals(provider.alertCanceledCount, 1)
@@ -89,7 +89,7 @@ class WatcherAlertTest {
         Assert.assertEquals(provider.alertCanceledCount, 0)
 
         // Trigger alert
-        provider.updateValue(70)
+        provider.onValueUpdated(70)
         // Cancel alert
         provider.updateThreshold(90)
 
@@ -107,7 +107,7 @@ class WatcherAlertTest {
         Assert.assertEquals(provider.alertCanceledCount, 0)
 
         // Trigger alert
-        provider.updateValue(70)
+        provider.onValueUpdated(70)
         // Cancel alert
         provider.disableThreshold()
 
