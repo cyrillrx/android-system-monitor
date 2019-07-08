@@ -6,5 +6,5 @@ package com.cyrillrx.monitor.provider
  */
 interface ValueUpdatedListener {
 
-    fun onValueUpdated(newValue : Int)
+    fun onValueUpdated(newValue: Int)
 }

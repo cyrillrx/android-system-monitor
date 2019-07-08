@@ -1,4 +1,4 @@
-package com.cyrillrx.monitor.provider
+package com.cyrillrx.monitor.detector
 
 /**
  * @author Cyril Leroux

@@ -1,13 +1,15 @@
-package com.cyrillrx.monitor.provider
+package com.cyrillrx.monitor.detector
+
+import com.cyrillrx.monitor.provider.ValueUpdatedListener
 
 /**
  * @author Cyril Leroux
  *          Created on 05/07/2019.
  */
-open class StatWatcher(protected var alertListener: AlertListener? = null) : ValueUpdatedListener {
+abstract class ThresholdDetector : ValueUpdatedListener {
 
     private var lastKnownValue: Int = 0
-    private var thresholdPercent: Int? = null
+    protected var thresholdPercent: Int? = null
 
     private var thresholdReached: Boolean = false
 
@@ -27,10 +29,10 @@ open class StatWatcher(protected var alertListener: AlertListener? = null) : Val
 
         // Detect threshold crossing
         if (wasThresholdReached && !thresholdReached) {
-            alertListener?.onAlertCanceled(lastKnownValue)
+            thresholdCrossedDown(lastKnownValue)
 
         } else if (!wasThresholdReached && thresholdReached) {
-            alertListener?.onAlertTriggered(lastKnownValue)
+            thresholdCrossedUp(lastKnownValue)
         }
     }
 
@@ -38,7 +40,7 @@ open class StatWatcher(protected var alertListener: AlertListener? = null) : Val
         thresholdPercent = null
 
         if (thresholdReached) {
-            alertListener?.onAlertCanceled(lastKnownValue)
+            thresholdCrossedDown(lastKnownValue)
         }
     }
 
@@ -53,18 +55,18 @@ open class StatWatcher(protected var alertListener: AlertListener? = null) : Val
 
         // Detect threshold crossing
         if (wasThresholdReached && !thresholdReached) {
-            alertListener?.onAlertCanceled(lastKnownValue)
+            thresholdCrossedDown(lastKnownValue)
 
         } else if (!wasThresholdReached && thresholdReached) {
-            alertListener?.onAlertTriggered(lastKnownValue)
+            thresholdCrossedUp(lastKnownValue)
         }
     }
 
-    private fun isThresholdReached(value: Int?): Boolean {
-        val thresholdPercent = thresholdPercent ?: return false
-        // >= because we consider that an equality triggers the threshold
-        return value != null && value >= thresholdPercent
-    }
+    protected abstract fun thresholdCrossedUp(value: Int)
+
+    protected abstract fun thresholdCrossedDown(value: Int)
+
+    protected abstract fun isThresholdReached(value: Int): Boolean
 
     companion object {
         private const val MIN_VALUE = 0
