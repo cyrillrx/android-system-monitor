@@ -8,9 +8,10 @@ import com.cyrillrx.monitor.detector.ThresholdDetector
  * @author Cyril Leroux
  *         Created on 09/07/2019.
  */
-class AboveThresholdDetector(context: Context, statName: String, threshold: Int) : ThresholdDetector() {
+class AboveThresholdDetector(context: Context, statName: String, notificationId: Int, threshold: Int)
+    : ThresholdDetector() {
 
-    private val notificationListener = NotificationListener(context, statName)
+    private val notificationListener = NotificationListener(context, notificationId, statName)
 
     init {
         updateThreshold(threshold)

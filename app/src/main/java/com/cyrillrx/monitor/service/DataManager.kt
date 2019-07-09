@@ -10,6 +10,7 @@ import com.cyrillrx.monitor.provider.ValueUpdatedListener
 import com.cyrillrx.monitor.provider.impl.BatteryLevelProvider
 import com.cyrillrx.monitor.provider.impl.CpuLoadProvider
 import com.cyrillrx.monitor.provider.impl.RamUsageProvider
+import com.cyrillrx.monitor.utils.NotificationUtils
 import com.cyrillrx.monitor.utils.UserPref
 
 /**
@@ -35,6 +36,7 @@ object DataManager {
             BelowThresholdDetector(
                 context,
                 context.getString(R.string.stat_label_battery),
+                NotificationUtils.NOTIFICATION_ID_BATTERY_LEVEL,
                 UserPref.getBatteryThreshold(context)
             ).also { this.batteryLevelDetector = it }
 
@@ -42,6 +44,7 @@ object DataManager {
             AboveThresholdDetector(
                 context,
                 context.getString(R.string.stat_label_memory),
+                NotificationUtils.NOTIFICATION_ID_RAM_USAGE,
                 UserPref.getMemoryThreshold(context)
             ).also { this.ramUsageDetector = it }
 
@@ -49,6 +52,7 @@ object DataManager {
             AboveThresholdDetector(
                 context,
                 context.getString(R.string.stat_label_cpu),
+                NotificationUtils.NOTIFICATION_ID_CPU_LOAD,
                 UserPref.getCpuThreshold(context)
             ).also { this.cpuLoadDetector = it }
 

@@ -15,7 +15,10 @@ import com.cyrillrx.monitor.R
 object NotificationUtils {
 
     private const val CHANNEL_ID_MONITORING_ALERT = "1.monitoring.alert"
-    private const val NOTIFICATION_ID_ALERT = 6000
+
+    const val NOTIFICATION_ID_BATTERY_LEVEL = 6000
+    const val NOTIFICATION_ID_RAM_USAGE = 6001
+    const val NOTIFICATION_ID_CPU_LOAD = 6002
 
     fun createChannels(context: Context) {
 
@@ -43,7 +46,7 @@ object NotificationUtils {
         notificationManager.createNotificationChannel(alertChannel)
     }
 
-    fun notifyAlert(context: Context, title: String, content: String) {
+    fun notifyAlert(context: Context, notificationId: Int, title: String, content: String) {
 
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID_MONITORING_ALERT)
         notificationBuilder.setContentTitle(title)
@@ -54,6 +57,6 @@ object NotificationUtils {
         val notification = notificationBuilder.build()
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(NOTIFICATION_ID_ALERT, notification)
+        notificationManager.notify(notificationId, notification)
     }
 }
