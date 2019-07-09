@@ -1,4 +1,4 @@
-package com.cyrillrx.monitor.preference
+package com.cyrillrx.monitor.utils
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -18,19 +18,28 @@ object UserPref {
     private const val DEFAULT_MEMORY_THRESHOLD = 60
     private const val DEFAULT_CPU_THRESHOLD = 60
 
-    fun getBatteryThreshold(context: Context) = context.getPrefInt(KEY_BATTERY_THRESHOLD, DEFAULT_BATTERY_THRESHOLD)
+    fun getBatteryThreshold(context: Context) = context.getPrefInt(
+        KEY_BATTERY_THRESHOLD,
+        DEFAULT_BATTERY_THRESHOLD
+    )
 
     fun saveBatteryThreshold(context: Context, threshold: Int) {
         context.savePrefInt(KEY_BATTERY_THRESHOLD, threshold)
     }
 
-    fun getMemoryThreshold(context: Context) = context.getPrefInt(KEY_MEMORY_THRESHOLD, DEFAULT_MEMORY_THRESHOLD)
+    fun getMemoryThreshold(context: Context) = context.getPrefInt(
+        KEY_MEMORY_THRESHOLD,
+        DEFAULT_MEMORY_THRESHOLD
+    )
 
     fun saveMemoryThreshold(context: Context, threshold: Int) {
         context.savePrefInt(KEY_MEMORY_THRESHOLD, threshold)
     }
 
-    fun getCpuThreshold(context: Context) = context.getPrefInt(KEY_CPU_THRESHOLD, DEFAULT_CPU_THRESHOLD)
+    fun getCpuThreshold(context: Context) = context.getPrefInt(
+        KEY_CPU_THRESHOLD,
+        DEFAULT_CPU_THRESHOLD
+    )
 
     fun saveCpuThreshold(context: Context, threshold: Int) {
         context.savePrefInt(KEY_CPU_THRESHOLD, threshold)

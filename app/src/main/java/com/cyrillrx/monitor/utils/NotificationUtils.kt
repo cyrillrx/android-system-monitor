@@ -1,4 +1,4 @@
-package com.cyrillrx.monitor.notification
+package com.cyrillrx.monitor.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

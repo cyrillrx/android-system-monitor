@@ -1,7 +1,7 @@
 package com.cyrillrx.monitor
 
 import android.app.Application
-import com.cyrillrx.monitor.notification.NotificationUtils
+import com.cyrillrx.monitor.utils.NotificationUtils
 
 /**
  * @author Cyril Leroux
