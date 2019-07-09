@@ -1,6 +1,7 @@
 package com.cyrillrx.monitor.service
 
 import android.content.Context
+import android.util.Log
 import com.cyrillrx.monitor.R
 import com.cyrillrx.monitor.detector.ThresholdDetector
 import com.cyrillrx.monitor.detector.impl.AboveThresholdDetector
@@ -17,15 +18,18 @@ import com.cyrillrx.monitor.utils.UserPref
  */
 object DataManager {
 
-    var batteryLevelDetector: ThresholdDetector? = null
-    var ramUsageDetector: ThresholdDetector? = null
-    var cpuLoadDetector: ThresholdDetector? = null
+    private val TAG = DataManager::class.java.simpleName
 
-    var batteryLevelProvider: BatteryLevelProvider? = null
-    var ramUsageProvider: RamUsageProvider? = null
-    var cpuLoadProvider: CpuLoadProvider? = null
+    private var batteryLevelDetector: ThresholdDetector? = null
+    private var ramUsageDetector: ThresholdDetector? = null
+    private var cpuLoadDetector: ThresholdDetector? = null
+
+    private var batteryLevelProvider: BatteryLevelProvider? = null
+    private var ramUsageProvider: RamUsageProvider? = null
+    private var cpuLoadProvider: CpuLoadProvider? = null
 
     fun startMonitoring(context: Context) {
+        Log.i(TAG, "startMonitoring")
 
         val batteryLevelDetector =
             BelowThresholdDetector(
@@ -33,7 +37,6 @@ object DataManager {
                 context.getString(R.string.stat_label_battery),
                 UserPref.getBatteryThreshold(context)
             ).also { this.batteryLevelDetector = it }
-        batteryLevelProvider = BatteryLevelProvider(context).apply { addListener(batteryLevelDetector) }
 
         val ramUsageDetector =
             AboveThresholdDetector(
@@ -41,7 +44,6 @@ object DataManager {
                 context.getString(R.string.stat_label_memory),
                 UserPref.getMemoryThreshold(context)
             ).also { this.ramUsageDetector = it }
-        ramUsageProvider = RamUsageProvider(context).apply { addListener(ramUsageDetector) }
 
         val cpuLoadDetector =
             AboveThresholdDetector(
@@ -49,22 +51,36 @@ object DataManager {
                 context.getString(R.string.stat_label_cpu),
                 UserPref.getCpuThreshold(context)
             ).also { this.cpuLoadDetector = it }
-        cpuLoadProvider = CpuLoadProvider().apply { addListener(cpuLoadDetector) }
+
+        batteryLevelProvider = BatteryLevelProvider(context).apply { addListener(context, batteryLevelDetector) }
+        ramUsageProvider = RamUsageProvider(context).apply { addListener(context, ramUsageDetector) }
+        cpuLoadProvider = CpuLoadProvider(context).apply { addListener(context, cpuLoadDetector) }
     }
 
     fun stopMonitoring() {
+        Log.i(TAG, "stopMonitoring")
+
         batteryLevelDetector?.let { batteryLevelProvider?.removeListener(it) }
         ramUsageDetector?.let { ramUsageProvider?.removeListener(it) }
         cpuLoadDetector?.let { cpuLoadProvider?.removeListener(it) }
     }
 
-    fun bindUi(batteryLevel: ValueUpdatedListener, ramUsage: ValueUpdatedListener, cpuLoad: ValueUpdatedListener) {
-        batteryLevelProvider?.addListener(batteryLevel)
-        ramUsageProvider?.addListener(ramUsage)
-        cpuLoadProvider?.addListener(cpuLoad)
+    fun bindUi(
+        context: Context,
+        batteryLevel: ValueUpdatedListener,
+        ramUsage: ValueUpdatedListener,
+        cpuLoad: ValueUpdatedListener) {
+
+        batteryLevelProvider?.addListener(context, batteryLevel)
+        ramUsageProvider?.addListener(context, ramUsage)
+        cpuLoadProvider?.addListener(context, cpuLoad)
     }
 
-    fun unbindUi(batteryLevel: ValueUpdatedListener, ramUsage: ValueUpdatedListener, cpuLoad: ValueUpdatedListener) {
+    fun unbindUi(
+        batteryLevel: ValueUpdatedListener,
+        ramUsage: ValueUpdatedListener,
+        cpuLoad: ValueUpdatedListener) {
+
         batteryLevelProvider?.removeListener(batteryLevel)
         ramUsageProvider?.removeListener(ramUsage)
         cpuLoadProvider?.removeListener(cpuLoad)
@@ -79,10 +95,6 @@ object DataManager {
         batteryLevelDetector?.updateThreshold(threshold)
     }
 
-    fun broadcastBatteryValue() {
-
-    }
-
     fun broadcastMemoryThreshold(context: Context, threshold: Int) {
 
         // Save preference
@@ -92,10 +104,6 @@ object DataManager {
         ramUsageDetector?.updateThreshold(threshold)
     }
 
-    fun broadcastMemoryValue() {
-
-    }
-
     fun broadcastCpuThreshold(context: Context, threshold: Int) {
 
         // Save preference
@@ -103,9 +111,5 @@ object DataManager {
 
         // Update watchers
         cpuLoadDetector?.updateThreshold(threshold)
-    }
-
-    fun broadcastCpuValue() {
-
     }
 }

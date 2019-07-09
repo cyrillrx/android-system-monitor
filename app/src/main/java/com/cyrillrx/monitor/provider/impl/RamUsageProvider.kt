@@ -2,15 +2,16 @@ package com.cyrillrx.monitor.provider.impl
 
 import android.app.ActivityManager
 import android.content.Context
+import com.cyrillrx.monitor.R
 import com.cyrillrx.monitor.provider.StatProvider
 
 /**
  * @author Cyril Leroux
  *          Created on 05/07/2019.
  */
-class RamUsageProvider(private val context: Context) : StatProvider() {
+class RamUsageProvider(context: Context) : StatProvider(context.getString(R.string.stat_label_memory)) {
 
-    override fun fetchData(): Int {
+    override fun fetchData(context: Context): Int {
 
         val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 

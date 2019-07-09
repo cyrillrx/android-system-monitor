@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             Log.v(TAG, "onServiceConnected")
 
             service = (binder as MonitoringService.Binder).getService()
-            DataManager.bindUi(batteryLevel, ramUsage, cpuLoad)
+            DataManager.bindUi(this@MainActivity, batteryLevel, ramUsage, cpuLoad)
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
