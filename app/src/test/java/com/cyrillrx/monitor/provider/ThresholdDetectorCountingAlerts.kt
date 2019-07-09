@@ -11,16 +11,16 @@ class ThresholdDetectorCountingAlerts : ThresholdDetector() {
     var alertTriggeredCount = 0
     var alertCanceledCount = 0
 
-    override fun thresholdCrossedUp(value: Int) {
+    override fun thresholdCrossedUp(value: Int?, threshold: Int?) {
         alertTriggeredCount++
     }
 
-    override fun thresholdCrossedDown(value: Int) {
+    override fun thresholdCrossedDown(value: Int?, threshold: Int?) {
         alertCanceledCount++
     }
 
-    override fun isThresholdReached(value: Int): Boolean {
-        val thresholdPercent = thresholdPercent ?: return false
-        return value >= thresholdPercent
+    override fun isThresholdReached(value: Int?, threshold: Int?): Boolean {
+        // >= because we consider that an equality triggers the threshold
+        return value != null && threshold != null && value >= threshold
     }
 }
