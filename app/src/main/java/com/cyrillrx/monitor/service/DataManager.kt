@@ -2,6 +2,7 @@ package com.cyrillrx.monitor.service
 
 import android.content.Context
 import android.util.Log
+import android.widget.TextView
 import com.cyrillrx.monitor.R
 import com.cyrillrx.monitor.detector.NotificationListener
 import com.cyrillrx.monitor.detector.ThresholdDetector
@@ -80,7 +81,8 @@ object DataManager {
         context: Context,
         batteryLevel: UiUpdater,
         ramUsage: UiUpdater,
-        cpuLoad: UiUpdater) {
+        cpuLoad: UiUpdater,
+        tvHistory: TextView) {
 
         // Update the last known value of every stat
         batteryLevel.onValueUpdated(batteryLevelProvider?.getLastKnownValue())
@@ -101,6 +103,10 @@ object DataManager {
         batteryLevelDetector?.addListener(batteryLevel)
         ramUsageDetector?.addListener(ramUsage)
         cpuLoadDetector?.addListener(cpuLoad)
+
+        // Bind history
+        tvHistory.text = AlertHistory.getHistory()
+        AlertHistory.onHistoryUpdated = { tvHistory.text = it }
     }
 
     fun unbindUi(
@@ -115,6 +121,8 @@ object DataManager {
         batteryLevelDetector?.removeListener(batteryLevel)
         ramUsageDetector?.removeListener(ramUsage)
         cpuLoadDetector?.removeListener(cpuLoad)
+
+        AlertHistory.onHistoryUpdated = null
     }
 
     fun broadcastBatteryThreshold(context: Context, threshold: Int) {

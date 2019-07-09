@@ -13,6 +13,7 @@ import com.cyrillrx.monitor.R
 import com.cyrillrx.monitor.service.DataManager
 import com.cyrillrx.monitor.service.MonitoringService
 import com.cyrillrx.monitor.utils.UserPref
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_stat_battery.*
 import kotlinx.android.synthetic.main.layout_stat_cpu.*
 import kotlinx.android.synthetic.main.layout_stat_ram.*
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             Log.v(TAG, "onServiceConnected")
 
             service = (binder as MonitoringService.Binder).getService()
-            DataManager.bindUi(this@MainActivity, batteryLevel, ramUsage, cpuLoad)
+            DataManager.bindUi(this@MainActivity, batteryLevel, ramUsage, cpuLoad, tvHistory)
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
