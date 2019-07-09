@@ -8,7 +8,7 @@ import com.cyrillrx.monitor.detector.ThresholdDetector
  * @author Cyril Leroux
  *         Created on 09/07/2019.
  */
-open class AboveThresholdDetector(context: Context, statName: String, threshold: Int) : ThresholdDetector() {
+class AboveThresholdDetector(context: Context, statName: String, threshold: Int) : ThresholdDetector() {
 
     private val notificationListener = NotificationListener(context, statName)
 
@@ -16,17 +16,16 @@ open class AboveThresholdDetector(context: Context, statName: String, threshold:
         updateThreshold(threshold)
     }
 
-    override fun thresholdCrossedUp(value: Int) {
-        notificationListener.onAlertTriggered(value)
+    override fun thresholdCrossedUp(value: Int?, threshold: Int?) {
+        notificationListener.onAlertTriggered(value, threshold)
     }
 
-    override fun thresholdCrossedDown(value: Int) {
-        notificationListener.onAlertCanceled(value)
+    override fun thresholdCrossedDown(value: Int?, threshold: Int?) {
+        notificationListener.onAlertCanceled(value, threshold)
     }
 
-    override fun isThresholdReached(value: Int): Boolean {
-        val thresholdPercent = thresholdPercent ?: return false
+    override fun isThresholdReached(value: Int?, threshold: Int?): Boolean {
         // >= because we consider that an equality triggers the threshold
-        return value >= thresholdPercent
+        return value != null && threshold != null && value >= threshold
     }
 }

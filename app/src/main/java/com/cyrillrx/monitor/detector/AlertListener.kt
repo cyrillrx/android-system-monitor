@@ -6,7 +6,7 @@ package com.cyrillrx.monitor.detector
  */
 interface AlertListener {
 
-    fun onAlertTriggered(percentage: Int?)
+    fun onAlertTriggered(value: Int?, threshold: Int?)
 
-    fun onAlertCanceled(percentage: Int?)
+    fun onAlertCanceled(value: Int?, threshold: Int?)
 }

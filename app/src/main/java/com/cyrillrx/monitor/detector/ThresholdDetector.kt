@@ -8,8 +8,8 @@ import com.cyrillrx.monitor.provider.ValueUpdatedListener
  */
 abstract class ThresholdDetector : ValueUpdatedListener {
 
-    private var lastKnownValue: Int = 0
-    protected var thresholdPercent: Int? = null
+    private var lastKnownValue: Int? = null
+    private var threshold: Int? = null
 
     private var thresholdReached: Boolean = false
 
@@ -24,23 +24,23 @@ abstract class ThresholdDetector : ValueUpdatedListener {
         val wasThresholdReached = thresholdReached
 
         // Update inner attributes
-        thresholdPercent = newThreshold
-        thresholdReached = isThresholdReached(lastKnownValue)
+        threshold = newThreshold
+        thresholdReached = isThresholdReached(lastKnownValue, threshold)
 
         // Detect threshold crossing
         if (wasThresholdReached && !thresholdReached) {
-            thresholdCrossedDown(lastKnownValue)
+            thresholdCrossedDown(lastKnownValue, threshold)
 
         } else if (!wasThresholdReached && thresholdReached) {
-            thresholdCrossedUp(lastKnownValue)
+            thresholdCrossedUp(lastKnownValue, threshold)
         }
     }
 
     fun disableThreshold() {
-        thresholdPercent = null
+        threshold = null
 
         if (thresholdReached) {
-            thresholdCrossedDown(lastKnownValue)
+            thresholdCrossedDown(lastKnownValue, threshold)
         }
     }
 
@@ -51,22 +51,22 @@ abstract class ThresholdDetector : ValueUpdatedListener {
 
         // Update inner attributes
         lastKnownValue = newValue
-        thresholdReached = isThresholdReached(newValue)
+        thresholdReached = isThresholdReached(lastKnownValue, threshold)
 
         // Detect threshold crossing
         if (wasThresholdReached && !thresholdReached) {
-            thresholdCrossedDown(lastKnownValue)
+            thresholdCrossedDown(lastKnownValue, threshold)
 
         } else if (!wasThresholdReached && thresholdReached) {
-            thresholdCrossedUp(lastKnownValue)
+            thresholdCrossedUp(lastKnownValue, threshold)
         }
     }
 
-    protected abstract fun thresholdCrossedUp(value: Int)
+    protected abstract fun thresholdCrossedUp(value: Int?, threshold: Int?)
 
-    protected abstract fun thresholdCrossedDown(value: Int)
+    protected abstract fun thresholdCrossedDown(value: Int?, threshold: Int?)
 
-    protected abstract fun isThresholdReached(value: Int): Boolean
+    protected abstract fun isThresholdReached(value: Int?, threshold: Int?): Boolean
 
     companion object {
         private const val MIN_VALUE = 0
