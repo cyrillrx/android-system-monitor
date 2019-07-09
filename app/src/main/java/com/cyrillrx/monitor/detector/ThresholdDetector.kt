@@ -6,12 +6,24 @@ import com.cyrillrx.monitor.provider.ValueUpdatedListener
  * @author Cyril Leroux
  *          Created on 05/07/2019.
  */
-abstract class ThresholdDetector : ValueUpdatedListener {
+abstract class ThresholdDetector : ValueUpdatedListener, ThresholdListener {
+
+    private val listeners = HashSet<ThresholdListener>()
 
     private var lastKnownValue: Int? = null
     private var threshold: Int? = null
 
-    private var thresholdReached: Boolean = false
+    private var thresholdExceeded: Boolean = false
+
+    fun isThresholdExceeded(): Boolean = thresholdExceeded
+
+    fun addListener(listener: ThresholdListener) {
+        listeners.add(listener)
+    }
+
+    fun removeListener(listener: ThresholdListener) {
+        listeners.remove(listener)
+    }
 
     /** @param newThreshold The threshold in percent [0-100] */
     fun updateThreshold(newThreshold: Int) {
@@ -21,52 +33,56 @@ abstract class ThresholdDetector : ValueUpdatedListener {
         }
 
         // Save the old state to be able to detect threshold crossing
-        val wasThresholdReached = thresholdReached
+        val wasThresholdExceeded = thresholdExceeded
 
         // Update inner attributes
         threshold = newThreshold
-        thresholdReached = isThresholdReached(lastKnownValue, threshold)
+        thresholdExceeded = isThresholdExceeded(lastKnownValue, threshold)
 
         // Detect threshold crossing
-        if (wasThresholdReached && !thresholdReached) {
-            thresholdCrossedDown(lastKnownValue, threshold)
+        if (wasThresholdExceeded && !thresholdExceeded) {
+            onValueReturnsToNormal(lastKnownValue, threshold)
 
-        } else if (!wasThresholdReached && thresholdReached) {
-            thresholdCrossedUp(lastKnownValue, threshold)
+        } else if (!wasThresholdExceeded && thresholdExceeded) {
+            onThresholdExceeded(lastKnownValue, threshold)
         }
     }
 
     fun disableThreshold() {
         threshold = null
 
-        if (thresholdReached) {
-            thresholdCrossedDown(lastKnownValue, threshold)
+        if (thresholdExceeded) {
+            onValueReturnsToNormal(lastKnownValue, threshold)
         }
     }
 
-    override fun onValueUpdated(newValue: Int) {
+    override fun onValueUpdated(newValue: Int?) {
 
         // Save the old state to be able to detect threshold crossing
-        val wasThresholdReached = thresholdReached
+        val wasThresholdExceeded = thresholdExceeded
 
         // Update inner attributes
         lastKnownValue = newValue
-        thresholdReached = isThresholdReached(lastKnownValue, threshold)
+        thresholdExceeded = isThresholdExceeded(lastKnownValue, threshold)
 
         // Detect threshold crossing
-        if (wasThresholdReached && !thresholdReached) {
-            thresholdCrossedDown(lastKnownValue, threshold)
+        if (wasThresholdExceeded && !thresholdExceeded) {
+            onValueReturnsToNormal(lastKnownValue, threshold)
 
-        } else if (!wasThresholdReached && thresholdReached) {
-            thresholdCrossedUp(lastKnownValue, threshold)
+        } else if (!wasThresholdExceeded && thresholdExceeded) {
+            onThresholdExceeded(lastKnownValue, threshold)
         }
     }
 
-    protected abstract fun thresholdCrossedUp(value: Int?, threshold: Int?)
+    override fun onThresholdExceeded(value: Int?, threshold: Int?) {
+        listeners.forEach { it.onThresholdExceeded(value, threshold) }
+    }
 
-    protected abstract fun thresholdCrossedDown(value: Int?, threshold: Int?)
+    override fun onValueReturnsToNormal(value: Int?, threshold: Int?) {
+        listeners.forEach { it.onValueReturnsToNormal(value, threshold) }
+    }
 
-    protected abstract fun isThresholdReached(value: Int?, threshold: Int?): Boolean
+    protected abstract fun isThresholdExceeded(value: Int?, threshold: Int?): Boolean
 
     companion object {
         private const val MIN_VALUE = 0

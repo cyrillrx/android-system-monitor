@@ -19,6 +19,24 @@ abstract class StatProvider(private val name: String) {
 
     protected abstract fun fetchData(context: Context): Int
 
+    fun getLastKnownValue() = lastKnownValue
+
+    fun addListener(context: Context, listener: ValueUpdatedListener) {
+
+        // If listener is the first to be added, start fetching data updates
+        if (listeners.add(listener) && listeners.size == 1) {
+            startFetching(context)
+        }
+    }
+
+    fun removeListener(listener: ValueUpdatedListener) {
+
+        // If listener was the last to be removed, stop fetching data updates
+        if (listeners.remove(listener) && listeners.isEmpty()) {
+            stopFetching()
+        }
+    }
+
     private fun startFetching(context: Context) {
         Log.i(TAG, "startFetching")
 
@@ -46,22 +64,6 @@ abstract class StatProvider(private val name: String) {
 
         listeners.forEach { it.onValueUpdated(newValue) }
         lastKnownValue = newValue
-    }
-
-    fun addListener(context: Context, listener: ValueUpdatedListener) {
-
-        // If listener is the first to be added, start fetching data updates
-        if (listeners.add(listener) && listeners.size == 1) {
-            startFetching(context)
-        }
-    }
-
-    fun removeListener(listener: ValueUpdatedListener) {
-
-        // If listener was the last to be removed, stop fetching data updates
-        if (listeners.remove(listener) && listeners.isEmpty()) {
-            stopFetching()
-        }
     }
 
     companion object {

@@ -1,32 +1,20 @@
 package com.cyrillrx.monitor.detector.impl
 
-import android.content.Context
-import com.cyrillrx.monitor.detector.NotificationListener
 import com.cyrillrx.monitor.detector.ThresholdDetector
 
 /**
  * @author Cyril Leroux
  *         Created on 09/07/2019.
  */
-class AboveThresholdDetector(context: Context, statName: String, notificationId: Int, threshold: Int)
-    : ThresholdDetector() {
-
-    private val notificationListener = NotificationListener(context, notificationId, statName)
+class AboveThresholdDetector(threshold: Int) : ThresholdDetector() {
 
     init {
         updateThreshold(threshold)
     }
 
-    override fun thresholdCrossedUp(value: Int?, threshold: Int?) {
-        notificationListener.onAlertTriggered(value, threshold)
-    }
-
-    override fun thresholdCrossedDown(value: Int?, threshold: Int?) {
-        notificationListener.onAlertCanceled(value, threshold)
-    }
-
-    override fun isThresholdReached(value: Int?, threshold: Int?): Boolean {
-        // >= because we consider that an equality triggers the threshold
-        return value != null && threshold != null && value >= threshold
+    override fun isThresholdExceeded(value: Int?, threshold: Int?): Boolean {
+        // We use '>' instead of '>=' because we consider that
+        // an equality do not triggers the threshold
+        return value != null && threshold != null && value > threshold
     }
 }

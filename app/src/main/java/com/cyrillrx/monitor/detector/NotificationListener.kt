@@ -12,9 +12,9 @@ import com.cyrillrx.monitor.utils.NotificationUtils
 class NotificationListener(
     private val context: Context,
     private val notificationId: Int,
-    private val statName: String) : AlertListener {
+    private val statName: String) : ThresholdListener {
 
-    override fun onAlertTriggered(value: Int?, threshold: Int?) {
+    override fun onThresholdExceeded(value: Int?, threshold: Int?) {
         val message = "$statName alert triggered: $value% (threshold: $threshold)"
 
         Log.i(TAG, message)
@@ -22,7 +22,7 @@ class NotificationListener(
         NotificationUtils.notifyAlert(context, notificationId, statName, message)
     }
 
-    override fun onAlertCanceled(value: Int?, threshold: Int?) {
+    override fun onValueReturnsToNormal(value: Int?, threshold: Int?) {
         val message = "$statName alert canceled: $value% (threshold: $threshold)"
 
         Log.i(TAG, message)

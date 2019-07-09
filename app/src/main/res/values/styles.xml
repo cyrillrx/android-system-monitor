@@ -10,4 +10,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="StatName">
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">start</item>
+    </style>
+
+    <style name="StatValue">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="StatThreshold">
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 </resources>

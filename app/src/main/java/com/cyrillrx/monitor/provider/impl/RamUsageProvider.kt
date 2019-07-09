@@ -9,7 +9,7 @@ import com.cyrillrx.monitor.provider.StatProvider
  * @author Cyril Leroux
  *          Created on 05/07/2019.
  */
-class RamUsageProvider(context: Context) : StatProvider(context.getString(R.string.stat_label_memory)) {
+class RamUsageProvider(context: Context) : StatProvider(context.getString(R.string.stat_label_ram_usage)) {
 
     override fun fetchData(context: Context): Int {
 

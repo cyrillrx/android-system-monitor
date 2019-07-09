@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/tvCpuLoadValue"
+        android:id="@+id/tvRamUsageValue"
         style="@style/StatValue"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -15,31 +15,31 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvCpuLoadLabel"
+        android:id="@+id/tvRamUsageLabel"
         style="@style/StatName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/stat_label_cpu_load"
-        app:layout_constraintEnd_toStartOf="@id/tvCpuLoadValue"
+        android:text="@string/stat_label_ram_usage"
+        app:layout_constraintEnd_toStartOf="@id/tvRamUsageValue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvCpuLoadThreshold"
+        android:id="@+id/tvRamUsageThreshold"
         style="@style/StatThreshold"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@id/tvCpuLoadLabel"
-        app:layout_constraintStart_toStartOf="@id/tvCpuLoadLabel"
-        app:layout_constraintTop_toBottomOf="@id/tvCpuLoadLabel" />
+        app:layout_constraintEnd_toEndOf="@id/tvRamUsageLabel"
+        app:layout_constraintStart_toStartOf="@id/tvRamUsageLabel"
+        app:layout_constraintTop_toBottomOf="@id/tvRamUsageLabel" />
 
     <SeekBar
-        android:id="@+id/sbCpuLoad"
+        android:id="@+id/sbRamUsage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:max="100"
-        app:layout_constraintEnd_toEndOf="@id/tvCpuLoadLabel"
-        app:layout_constraintStart_toStartOf="@id/tvCpuLoadLabel"
-        app:layout_constraintTop_toBottomOf="@id/tvCpuLoadThreshold" />
+        app:layout_constraintEnd_toEndOf="@id/tvRamUsageLabel"
+        app:layout_constraintStart_toStartOf="@id/tvRamUsageLabel"
+        app:layout_constraintTop_toBottomOf="@id/tvRamUsageThreshold" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

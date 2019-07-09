@@ -10,34 +10,18 @@ import android.util.Log
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.cyrillrx.monitor.R
-import com.cyrillrx.monitor.provider.ValueUpdatedListener
 import com.cyrillrx.monitor.service.DataManager
 import com.cyrillrx.monitor.service.MonitoringService
 import com.cyrillrx.monitor.utils.UserPref
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_stat_battery.*
 import kotlinx.android.synthetic.main.layout_stat_cpu.*
-import kotlinx.android.synthetic.main.layout_stat_memory.*
+import kotlinx.android.synthetic.main.layout_stat_ram.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val batteryLevel = object : ValueUpdatedListener {
-        override fun onValueUpdated(newValue: Int) {
-            tvBatteryValue?.text = "$newValue%"
-        }
-    }
-
-    private val ramUsage = object : ValueUpdatedListener {
-        override fun onValueUpdated(newValue: Int) {
-            tvMemoryValue?.text = "$newValue%"
-        }
-    }
-
-    private val cpuLoad = object : ValueUpdatedListener {
-        override fun onValueUpdated(newValue: Int) {
-            tvCpuValue?.text = "$newValue%"
-        }
-    }
+    private lateinit var batteryLevel: UiUpdater
+    private lateinit var ramUsage: UiUpdater
+    private lateinit var cpuLoad: UiUpdater
 
     private val serviceConnector = object : ServiceConnection {
 
@@ -73,9 +57,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setupViews()
+        batteryLevel = UiUpdater(tvBatteryValue)
+        ramUsage = UiUpdater(tvRamUsageValue)
+        cpuLoad = UiUpdater(tvCpuLoadValue)
 
-        btnGo.setOnClickListener { startMonitoringService() }
+        setupViews()
 
         serviceConnector.bindService()
     }
@@ -103,10 +89,10 @@ class MainActivity : AppCompatActivity() {
         })
         sbBattery.progress = UserPref.getBatteryThreshold(this@MainActivity)
 
-        sbMemory.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        sbRamUsage.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                tvMemoryThreshold.text = "$progress%"
+                tvRamUsageThreshold.text = "$progress%"
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -117,12 +103,12 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
-        sbMemory.progress = UserPref.getMemoryThreshold(this@MainActivity)
+        sbRamUsage.progress = UserPref.getMemoryThreshold(this@MainActivity)
 
-        sbCpu.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        sbCpuLoad.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                tvCpuThreshold.text = "$progress%"
+                tvCpuLoadThreshold.text = "$progress%"
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -133,11 +119,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
-        sbCpu.progress = UserPref.getCpuThreshold(this@MainActivity)
-    }
-
-    private fun startMonitoringService() {
-
+        sbCpuLoad.progress = UserPref.getCpuThreshold(this@MainActivity)
     }
 
     companion object {

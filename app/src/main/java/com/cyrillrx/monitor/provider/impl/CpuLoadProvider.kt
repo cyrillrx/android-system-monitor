@@ -8,7 +8,7 @@ import com.cyrillrx.monitor.provider.StatProvider
  * @author Cyril Leroux
  *          Created on 05/07/2019.
  */
-class CpuLoadProvider(context: Context) : StatProvider(context.getString(R.string.stat_label_cpu)) {
+class CpuLoadProvider(context: Context) : StatProvider(context.getString(R.string.stat_label_cpu_load)) {
 
     override fun fetchData(context: Context): Int {
 

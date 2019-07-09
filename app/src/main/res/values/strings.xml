@@ -8,7 +8,7 @@
     <string name="notification_channel_alerts_desc">"Be notified when an alert is triggered</string>
 
     <string name="stat_label_battery">Battery level</string>
-    <string name="stat_label_memory">Global memory usage</string>
-    <string name="stat_label_cpu">System Cpu Load</string>
+    <string name="stat_label_ram_usage">Memory usage</string>
+    <string name="stat_label_cpu_load">CPU load</string>
 
 </resources>
