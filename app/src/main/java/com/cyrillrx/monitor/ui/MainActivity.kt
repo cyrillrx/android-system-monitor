@@ -10,6 +10,7 @@ import android.util.Log
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.cyrillrx.monitor.R
+import com.cyrillrx.monitor.detector.NotificationListener
 import com.cyrillrx.monitor.service.DataManager
 import com.cyrillrx.monitor.service.MonitoringService
 import com.cyrillrx.monitor.utils.UserPref
@@ -121,6 +122,12 @@ class MainActivity : AppCompatActivity() {
             }
         })
         sbCpuLoad.progress = UserPref.getCpuThreshold(this@MainActivity)
+
+        cbNotifyAlertRecovered.isChecked = UserPref.getAlertRecovered(this@MainActivity)
+        cbNotifyAlertRecovered.setOnCheckedChangeListener { _, isChecked ->
+            UserPref.saveAlertRecovered(this, isChecked)
+            NotificationListener.notifyAlertRecovered = isChecked
+        }
     }
 
     companion object {

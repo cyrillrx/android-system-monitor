@@ -2,7 +2,6 @@ package com.cyrillrx.monitor.detector
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import com.cyrillrx.monitor.service.AlertHistory
 import com.cyrillrx.monitor.utils.NotificationUtils
 
@@ -19,21 +18,27 @@ class NotificationListener(
         val message = "$statName alert triggered - value: $value% threshold: $threshold%"
 
         Log.i(TAG, message)
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         NotificationUtils.notifyAlert(context, notificationId, statName, message)
         AlertHistory.addEntry(message)
     }
 
     override fun onValueReturnsToNormal(value: Int?, threshold: Int?) {
-        val message = "$statName back to normal - value: $value% threshold: $threshold%"
 
+        val message = "$statName back to normal - value: $value% threshold: $threshold%"
         Log.i(TAG, message)
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-        NotificationUtils.notifyAlert(context, notificationId, statName, message)
-        AlertHistory.addEntry(message)
+
+        if (notifyAlertRecovered) {
+            NotificationUtils.notifyAlert(context, notificationId, statName, message)
+            AlertHistory.addEntry(message)
+
+        } else {
+            NotificationUtils.cancelNotification(context, notificationId)
+        }
     }
 
     companion object {
         private val TAG = NotificationListener::class.java.simpleName
+
+        var notifyAlertRecovered = false
     }
 }

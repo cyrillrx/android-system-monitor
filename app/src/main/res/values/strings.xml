@@ -5,10 +5,12 @@
     <string name="app_name">System Monitor</string>
 
     <string name="notification_channel_alerts_title">Alerts</string>
-    <string name="notification_channel_alerts_desc">"Be notified when an alert is triggered</string>
+    <string name="notification_channel_alerts_desc">Be notified when an alert is triggered</string>
 
     <string name="stat_label_battery">Battery level</string>
     <string name="stat_label_ram_usage">Memory usage</string>
     <string name="stat_label_cpu_load">CPU load</string>
+
+    <string name="pref_notify_alert_recovered">Display a notification whenever an alert is recovered.</string>
 
 </resources>

@@ -15,6 +15,13 @@
 
         <include layout="@layout/layout_stat_cpu" />
 
+        <CheckBox
+            android:id="@+id/cbNotifyAlertRecovered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/pref_notify_alert_recovered" />
+
         <TextView
             android:id="@+id/tvHistory"
             android:layout_width="match_parent"
