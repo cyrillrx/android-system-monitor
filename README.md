@@ -12,7 +12,11 @@ Anytime this happens, a notification alerts the user
 
 If the user opts so, a notification is also displayed whenever the metrics returns below the threshold.
 
-# Improvements
+# Note 
+Android O prevents access to /proc/stat
+https://issuetracker.google.com/issues/37140047
+
+# Possible improvements
 - Use a persistent solution to store alert history (e.g. Room)
 - Split the all-in-one layout into 3 stat views (and use an adapter to display them)
 - Use Intent.ACTION_BATTERY_CHANGED to prevent unnecessary calls to battery level
