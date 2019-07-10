@@ -11,7 +11,7 @@ import com.cyrillrx.monitor.provider.StatProvider
  */
 class BatteryLevelProvider(context: Context) : StatProvider(context.getString(R.string.stat_label_battery)) {
 
-    override fun fetchData(context: Context): Int {
+    override fun fetchData(context: Context): Int? {
 
         val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
         return batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)

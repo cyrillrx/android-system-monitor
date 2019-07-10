@@ -17,7 +17,9 @@ abstract class StatProvider(private val name: String) {
     private var runnable: Runnable? = null
     private var lastKnownValue: Int? = null
 
-    protected abstract fun fetchData(context: Context): Int
+    protected open val intervalMs: Long = INTERVAL_MS
+
+    protected abstract fun fetchData(context: Context): Int?
 
     fun getLastKnownValue() = lastKnownValue
 
@@ -41,14 +43,19 @@ abstract class StatProvider(private val name: String) {
         Log.i(TAG, "startFetching")
 
         runnable = Runnable {
-            val newValue = fetchData(context)
+            val newValue = try {
+                fetchData(context)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error occurred while fetching $$name data", e)
+                null
+            }
 
             Log.v(TAG, "data fetched - $name: $newValue")
             if (newValue != lastKnownValue) {
                 updateLastKnownValue(newValue)
             }
 
-            runnable?.let { handler.postDelayed(it, INTERVAL_MS) }
+            runnable?.let { handler.postDelayed(it, intervalMs) }
 
         }.also { handler.post(it) }
     }
@@ -59,7 +66,7 @@ abstract class StatProvider(private val name: String) {
 
     }
 
-    private fun updateLastKnownValue(newValue: Int) {
+    private fun updateLastKnownValue(newValue: Int?) {
         Log.i(TAG, "updateLastKnownValue() - $name: $newValue")
 
         listeners.forEach { it.onValueUpdated(newValue) }

@@ -11,7 +11,7 @@ import com.cyrillrx.monitor.provider.StatProvider
  */
 class RamUsageProvider(context: Context) : StatProvider(context.getString(R.string.stat_label_ram_usage)) {
 
-    override fun fetchData(context: Context): Int {
+    override fun fetchData(context: Context): Int? {
 
         val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 
