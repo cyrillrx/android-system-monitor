@@ -123,7 +123,10 @@ class MainActivity : AppCompatActivity() {
         })
         sbCpuLoad.progress = UserPref.getCpuThreshold(this@MainActivity)
 
-        cbNotifyAlertRecovered.isChecked = UserPref.getAlertRecovered(this@MainActivity)
+        val optInToAlertRecovered = UserPref.getAlertRecovered(this@MainActivity)
+        cbNotifyAlertRecovered.isChecked = optInToAlertRecovered
+        NotificationListener.notifyAlertRecovered = optInToAlertRecovered
+
         cbNotifyAlertRecovered.setOnCheckedChangeListener { _, isChecked ->
             UserPref.saveAlertRecovered(this, isChecked)
             NotificationListener.notifyAlertRecovered = isChecked
