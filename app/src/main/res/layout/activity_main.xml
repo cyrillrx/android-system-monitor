@@ -15,6 +15,14 @@
 
         <include layout="@layout/layout_stat_cpu" />
 
+        <TextView
+            android:id="@+id/tvDisclaimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/disclaimer"
+            android:textColor="@color/red" />
+
         <CheckBox
             android:id="@+id/cbNotifyAlertRecovered"
             android:layout_width="match_parent"

@@ -4,9 +4,11 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
+import android.view.View
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.cyrillrx.monitor.R
@@ -130,6 +132,12 @@ class MainActivity : AppCompatActivity() {
         cbNotifyAlertRecovered.setOnCheckedChangeListener { _, isChecked ->
             UserPref.saveAlertRecovered(this, isChecked)
             NotificationListener.notifyAlertRecovered = isChecked
+        }
+
+        if (Build.VERSION.SDK_INT < 26) {
+            tvDisclaimer.visibility = View.GONE
+        } else {
+            tvDisclaimer.visibility = View.VISIBLE
         }
     }
 

@@ -13,4 +13,9 @@
 
     <string name="pref_notify_alert_recovered">Display a notification whenever an alert is recovered.</string>
 
+    <string name="disclaimer">
+        Since Android 8.0 (API 26) Google has restricted access to the proc file system.
+        Until now it was possible to get total CPU usage.This does not work any more.
+        Running the app on a rooted device does not make difference.</string>
+
 </resources>

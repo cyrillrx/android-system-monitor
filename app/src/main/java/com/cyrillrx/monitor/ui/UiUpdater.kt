@@ -1,7 +1,7 @@
 package com.cyrillrx.monitor.ui
 
-import android.graphics.Color
 import android.widget.TextView
+import com.cyrillrx.monitor.R
 import com.cyrillrx.monitor.detector.ThresholdListener
 import com.cyrillrx.monitor.provider.ValueUpdatedListener
 
@@ -21,18 +21,18 @@ class UiUpdater(private val textView: TextView) : ValueUpdatedListener, Threshol
     }
 
     override fun onThresholdExceeded(value: Int?, threshold: Int?) {
-        textView.setTextColor(Color.RED)
+        textView.setTextColor(textView.context.getColor(R.color.red))
     }
 
     override fun onValueReturnsToNormal(value: Int?, threshold: Int?) {
-        textView.setTextColor(Color.GREEN)
+        textView.setTextColor(textView.context.getColor(R.color.green))
     }
 
     fun setThresholdExceeded(thresholdExceeded: Boolean?) {
         if (thresholdExceeded == true) {
-            textView.setTextColor(Color.RED)
+            textView.setTextColor(textView.context.getColor(R.color.red))
         } else {
-            textView.setTextColor(Color.GREEN)
+            textView.setTextColor(textView.context.getColor(R.color.green))
         }
     }
 }
